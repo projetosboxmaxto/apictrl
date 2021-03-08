@@ -112,6 +112,7 @@ class EventoService{
 	public static $sql_last0 = "";
 
     public static function getListEvento($dia, $dia_semana, $hora_seg, $write = true, $ret_mclipweb= true ){
+        
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
         
         $sql = "select ev.id, 
@@ -164,7 +165,7 @@ class EventoService{
         
 		self::$sql_last0 = $sql;
         $lista = DB::select($sql);   
-        
+
         if ( ! $ret_mclipweb ){
             return $lista;
         }

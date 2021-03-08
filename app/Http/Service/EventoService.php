@@ -114,21 +114,34 @@ class EventoService{
     public static function getListEvento($dia, $dia_semana, $hora_seg, $write = true, $ret_mclipweb= true ){
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
         
-        $sql = "select ev.id, pr.id as id_programa, 'normal' as tipo_hora  from ". $DB_MIDIACLIP .".programa pr 
-                      left join eventos ev on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
-                      where  pr.transcricao_ativar = 1 
-                 and pr.transcricao_tempo_inicio_seg <= ".$hora_seg." and pr.transcricao_tempo_fim_seg >= " . $hora_seg .
+        $sql = "select ev.id, 
+                    pr.id as id_programa, 
+                    'normal' as tipo_hora  
+                from ". $DB_MIDIACLIP .".programa pr 
+                      left join eventos ev 
+                        on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
+                      where  pr.transcricao_ativar = 1 and 
+                      (TIME_TO_SEC(pr.hora_inicio) - TIME_TO_SEC(pr.transcricao_tempo_extra_inicio))
+                            <= ".$hora_seg." and 
+                      (TIME_TO_SEC(pr.hora_fim) + TIME_TO_SEC(pr.transcricao_tempo_extra_fim)) 
+                            >= " . $hora_seg .
                 " and ev.id is null and pr.transcricao_dias like '%".$dia_semana."%'  "; 
         
         $hora = $hora_seg / 3600;
         
          if ( $hora >= 20 && $hora <= 24  ){
              
-             $sql .= " UNION select ev.id, pr.id as id_programa, 'virada_ini' as tipo_hora from ". $DB_MIDIACLIP .".programa pr 
-                      left join eventos ev on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
-                      where  pr.transcricao_ativar = 1 
-                 and pr.transcricao_tempo_inicio_seg > pr.transcricao_tempo_fim_seg &&
-                     pr.transcricao_tempo_inicio_seg <= ".$hora_seg. 
+             $sql .= " UNION 
+                        select ev.id, pr.id as id_programa, 'virada_ini' as tipo_hora 
+                            from ". $DB_MIDIACLIP .".programa pr 
+                      
+                      left join eventos ev 
+                        on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
+                    where  pr.transcricao_ativar = 1 and 
+                    (TIME_TO_SEC(pr.hora_inicio) - TIME_TO_SEC(pr.transcricao_tempo_extra_inicio))
+                            > (TIME_TO_SEC(pr.hora_fim) + TIME_TO_SEC(pr.transcricao_tempo_extra_fim)) &&
+                    (TIME_TO_SEC(pr.hora_inicio) - TIME_TO_SEC(pr.transcricao_tempo_extra_inicio)) 
+                            <= ".$hora_seg. 
                 " and ev.id is null and pr.transcricao_dias like '%".$dia_semana."%'  "; 
              
          }
@@ -136,14 +149,18 @@ class EventoService{
          
          if ( $hora >= 0 && $hora <= 4 ){
              
-              $sql .= " UNION select ev.id, pr.id as id_programa, 'virada_fim' as tipo_hora from ". $DB_MIDIACLIP .".programa pr 
-                      left join eventos ev on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
-                      where  pr.transcricao_ativar = 1 
-                 and pr.transcricao_tempo_inicio_seg > pr.transcricao_tempo_fim_seg &&  
-                 pr.transcricao_tempo_fim_seg >= ".$hora_seg. 
-                " and ev.id is null and pr.transcricao_dias like '%".$dia_semana."%'  "; 
+              $sql .= " UNION 
+                            select ev.id, pr.id as id_programa, 'virada_fim' as tipo_hora 
+                        from ". $DB_MIDIACLIP .".programa pr 
+                      left join eventos ev 
+                        on ( ev.id_programa = pr.id and ev.dia = ". $dia. " and ev.tipo = 'pai') 
+                      where  pr.transcricao_ativar = 1 and 
+                        (TIME_TO_SEC(pr.hora_inicio) - TIME_TO_SEC(pr.transcricao_tempo_extra_inicio)) 
+                            > (TIME_TO_SEC(pr.hora_fim) + TIME_TO_SEC(pr.transcricao_tempo_extra_fim)) &&  
+                        (TIME_TO_SEC(pr.hora_fim) + TIME_TO_SEC(pr.transcricao_tempo_extra_fim)) 
+                            >= ".$hora_seg. 
+                " and ev.id is null and  pr.transcricao_dias like '%".$dia_semana."%'  "; 
          }
-        //die($sql );
         
 		self::$sql_last0 = $sql;
         $lista = DB::select($sql);   
@@ -272,32 +289,43 @@ class EventoService{
         }
         
         
-        $sql = " select pr.*, em.id as id_emissora, em.nome as nome_emissora from ". $DB_MIDIACLIP .".programa pr
-                        inner join ". $DB_MIDIACLIP .".associacao_cadastros ac on (ac.id_pai = pr.id and ac.classificacao = 'programaxcanal_comunicacao' and ac.tabela_pai='programa' )
-                        inner join ". $DB_MIDIACLIP .".emissora em on em.id = ac.id_filho 
-                        where pr.id = ". $id_programa;
+        $sql = " select 
+                    pr.*, 
+                    TIME_TO_SEC(pr.hora_inicio) - TIME_TO_SEC(pr.transcricao_tempo_extra_inicio) as transcricao_gordura_inicio,
+                    TIME_TO_SEC(pr.hora_fim) + TIME_TO_SEC(pr.transcricao_tempo_extra_fim) as transcricao_gordura_fim,
+                    em.id as id_emissora, em.nome as nome_emissora 
+                        from ". $DB_MIDIACLIP .".programa pr
+                    inner join ". $DB_MIDIACLIP .".associacao_cadastros ac 
+                        on (
+                            ac.id_pai = pr.id and ac.classificacao = 'programaxcanal_comunicacao' and 
+                            ac.tabela_pai='programa' 
+                        )
+                    inner join ". $DB_MIDIACLIP .".emissora em on em.id = ac.id_filho 
+                where pr.id = ". $id_programa;
         
         
-        $lista = DB::select($sql);     
-        
+        $lista = DB::select($sql);
+
         if ( count($lista) > 0 ){
             $item = $lista[0];
             
             $reg->id_emissora = $item->id_emissora;
             
-            $tempo_inicio_seg = $item->transcricao_tempo_inicio_seg;
-            $tempo_fim_seg = $item->transcricao_tempo_fim_seg;
+            $tempo_inicio_seg = $item->transcricao_gordura_inicio;
+            $tempo_fim_seg = $item->transcricao_gordura_fim;
             
             if ( $tipo_hora == "virada_ini"){
-                     $tempo_inicio_seg = $item->transcricao_tempo_inicio_seg;
+                     $tempo_inicio_seg = $item->transcricao_gordura_inicio;
                      $tempo_fim_seg = UtilService::time_to_seconds("23:59:59"); // $item->transcricao_tempo_fim_seg;
             }
             if ( $tipo_hora == "virada_fim"){
                 
                     $tempo_inicio_seg = 0; //$item->transcricao_tempo_inicio_seg;
-                   $tempo_fim_seg = $item->transcricao_tempo_fim_seg;
+                   $tempo_fim_seg = $item->transcricao_gordura_fim;
                 
             }
+
+            if($tempo_fim_seg > 86399) $tempo_fim_seg = 86399;
             
             $duracao_seg = $tempo_fim_seg - $tempo_inicio_seg;
             
@@ -313,7 +341,6 @@ class EventoService{
             $reg->tempo_realizado_minutos =  0;
             $reg->tempo_total_minutos = $duracao_seg / 60;
         }
-        
         
         $reg->save();
         

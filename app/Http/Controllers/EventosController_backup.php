@@ -249,7 +249,7 @@ class EventosController extends Controller {
         public function index2(Request $request)
 	{
             
-            $DB_MIDIACLIP = env("DB_MIDIACLIP");
+            $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
             
             
             $dt_inicio = $request->input("dt_inicio");
@@ -398,7 +398,7 @@ class EventosController extends Controller {
                 Artisan::call('view:clear');
                 Artisan::call('route:clear');
                 
-                return $this->sendResponse(array("msg" => env("DB_HOST")." Cache limpo com sucesso - ".  env("PATH_ARQUIVOS"). " - ". env("DB_MIDIACLIP") ) );
+                return $this->sendResponse(array("msg" => config("app.DB_HOST")." Cache limpo com sucesso - ".  config("app.PATH_ARQUIVOS"). " - ". config("app.DB_MIDIACLIP") ) );
 
             
         }
@@ -497,7 +497,7 @@ class EventosController extends Controller {
            $sql = \App\Http\Service\EventoService::sqlArquivos($tipo == "cut")." where 1 = 1  ". $filtro.  $compl . " order by ea.hora_inicio_seg ";
            $arquivos = DB::select( $sql );
            
-           $url_base = env("PATH_URL_VIDEOS");
+           $url_base = config("app.PATH_URL_VIDEOS");
             
             for ( $i = 0; $i < count($arquivos); $i++ ){
                 $item = &$arquivos[$i];

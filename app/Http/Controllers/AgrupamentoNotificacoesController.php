@@ -411,7 +411,7 @@ class AgrupamentoNotificacoesController extends Controller {
 
         
         function encrypt( $senha ){
-               return md5( env("CRYPT_PASS") . $senha);
+               return md5( config("app.CRYPT_PASS") . $senha);
             //  return Hash::make( $senha);
         }
 		public function testheader(Request $request){
@@ -600,7 +600,7 @@ class AgrupamentoNotificacoesController extends Controller {
 		    $reg = AgrupamentoNotificacoes::find($id);
                     $reg_arquivo = \App\EventosArquivos::find($reg->id_evento_arquivo);
                 
-                    $url_base = env("PATH_URL_VIDEOS");
+                    $url_base = config("app.PATH_URL_VIDEOS");
 
                     $reg->url_load = $url_base. $reg_arquivo->path;
                     $reg->tempo_seg = \App\Http\Service\UtilService::time_to_seconds2 ($reg->tempo );

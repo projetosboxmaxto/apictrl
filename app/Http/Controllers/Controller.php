@@ -42,7 +42,7 @@ class Controller extends BaseController
     }
     
     public function getTokenId($id){
-               $remember_token = md5( env("CRYPT_PASS")."|".$id);
+               $remember_token = md5( config("app.CRYPT_PASS")."|".$id);
                return $remember_token;
     }
 	

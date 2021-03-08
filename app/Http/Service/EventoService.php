@@ -348,7 +348,7 @@ class EventoService{
     
     public static function criarDirOld($dia, $id){
         
-        $PATH_ARQUIVOS = env("PATH_ARQUIVOS");
+        $PATH_ARQUIVOS = config("app.PATH_ARQUIVOS");
         
         if ( !is_dir( $PATH_ARQUIVOS . DIRECTORY_SEPARATOR . $dia )){
             mkdir($PATH_ARQUIVOS . DIRECTORY_SEPARATOR . $dia);
@@ -363,7 +363,7 @@ class EventoService{
     
        public static function criarDir($dia, $pre, $id){
         
-        $PATH_ARQUIVOS = env("PATH_ARQUIVOS");
+        $PATH_ARQUIVOS = config("app.PATH_ARQUIVOS");
         
         if ( !is_dir( $PATH_ARQUIVOS . DIRECTORY_SEPARATOR . $pre )){
             mkdir($PATH_ARQUIVOS . DIRECTORY_SEPARATOR . $pre);
@@ -407,8 +407,8 @@ class EventoService{
       
     public static function getPathEvento2($obj, $real = true , $force_new = null ){
           
-        $PATH_ARQUIVOS = env("PATH_ARQUIVOS");
-            $PATH_SUBFOLDER = env("PATH_SUBFOLDER");
+        $PATH_ARQUIVOS = config("app.PATH_ARQUIVOS");
+            $PATH_SUBFOLDER = config("app.PATH_SUBFOLDER");
             
             $pre_real = "";
             $pre_relativo = "";
@@ -447,8 +447,8 @@ class EventoService{
             if ( $obj == null )
                 return "";
             
-            $PATH_ARQUIVOS = env("PATH_ARQUIVOS");
-            $PATH_SUBFOLDER = env("PATH_SUBFOLDER");
+            $PATH_ARQUIVOS = config("app.PATH_ARQUIVOS");
+            $PATH_SUBFOLDER = config("app.PATH_SUBFOLDER");
             $PATH_SUBFOLDER = "1";
             
             $pre_real = "";
@@ -480,7 +480,7 @@ class EventoService{
     
     public static function getPrePasta($evento, $real = false ){
         
-        $PATH_SUBFOLDER = env("PATH_SUBFOLDER");
+        $PATH_SUBFOLDER = config("app.PATH_SUBFOLDER");
             $PATH_SUBFOLDER = "1";
          if ( $PATH_SUBFOLDER == ""){
              return "";

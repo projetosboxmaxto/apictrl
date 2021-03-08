@@ -78,7 +78,7 @@ where texto_srch @@ to_tsquery('polícia & destaque')
         
         //self::removeSemUso();
         
-        $DB_MIDIACLIP = env("DB_MIDIACLIP");
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
         
         $reg = \App\EventosArquivos::find($id);
         
@@ -358,7 +358,7 @@ ELASTIC_URL="http://rafaeldatabase:9200"
     
     static function getPracaIdByPrograma($id_programa = ""){
         
-        $DB_MIDIACLIP = env("DB_MIDIACLIP");
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
         
         /*
          * 
@@ -398,7 +398,7 @@ ELASTIC_URL="http://rafaeldatabase:9200"
     
     static function getSQLTagsTotal($id_programa = ""){
         
-        $DB_MIDIACLIP = env("DB_MIDIACLIP");
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
        
         $ids_clientes = "";
         
@@ -475,7 +475,7 @@ ELASTIC_URL="http://rafaeldatabase:9200"
     
     static function getSQLTags($ids_tags, $colunas = "dt.*, c.nome as nome_cliente, c.id as id_cliente ", $compl = ""){
         
-        $DB_MIDIACLIP = env("DB_MIDIACLIP");
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
         
          $sql = " select ".$colunas." from ".$DB_MIDIACLIP.".dicionario_tags dt 
                     inner join ".$DB_MIDIACLIP.".associacao_cadastros aca on 

@@ -60,8 +60,8 @@ composer dump-autoload
         
           //session_destroy();
          //$request->session()->flush();
-         return array("msg" => env("DB_HOST"),"Use o método POST - ". env("APP_ENV")." - ".  env("PATH_ANEXO") ." - ".
-              date("Y-m-d H:i:s")," - ". env("DB_MIDIACLIP"));
+         return array("msg" => config("app.DB_HOST"),"Use o método POST - ". config("app.env")." - ".  config("app.PATH_ANEXO") ." - ".
+              date("Y-m-d H:i:s")," - ". config("app.DB_MIDIACLIP"));
     }
     
     public function showLoginForm(Request $request){

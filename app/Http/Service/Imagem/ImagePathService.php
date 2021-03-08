@@ -14,7 +14,7 @@ class ImagePathService implements IServiceImage{
     
         function __construct(){
 
-            $adapter = new Local(env("PATH_ARQUIVOS"));
+            $adapter = new Local(config("app.PATH_ARQUIVOS"));
             $filesystem = new Filesystem($adapter);
             
             $this->adapter = $adapter ;
@@ -23,7 +23,7 @@ class ImagePathService implements IServiceImage{
        }
        
        function getPathBase(){
-           return env("PATH_ARQUIVOS");
+           return config("app.PATH_ARQUIVOS");
        }
 
        function destroyImagem($name){
@@ -97,7 +97,7 @@ class ImagePathService implements IServiceImage{
        }
 
        function getUrl($name){
-       	  $str =  env("BASE_PATH"). str_replace("//","/", $this->folder."/". $name);
+       	  $str =  config("app.base_path"). str_replace("//","/", $this->folder."/". $name);
 
        	  return $str;
        }

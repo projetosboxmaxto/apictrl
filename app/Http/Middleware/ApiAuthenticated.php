@@ -80,7 +80,7 @@ class ApiAuthenticated {
 	}
 
 	public function getTokenTest($id){
-               $remember_token = $this->encrypt( env("CRYPT_PASS")."|".$id);
+               $remember_token = $this->encrypt( config("app.CRYPT_PASS")."|".$id);
                return $remember_token;
 	}
 

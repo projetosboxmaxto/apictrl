@@ -273,7 +273,7 @@ class MateriaRascunhoController extends Controller {
 
         
         function encrypt( $senha ){
-               return md5( env("CRYPT_PASS") . $senha);
+               return md5( config("app.CRYPT_PASS") . $senha);
             //  return Hash::make( $senha);
         }
 		public function testheader(Request $request){
@@ -284,7 +284,7 @@ class MateriaRascunhoController extends Controller {
 
         public function completa_materia($id){
             
-                       $url_sistema = env("PATH_SISTEMA_MIDIACLIP");
+                       $url_sistema = config("app.url_midiaclip");
                        $msg = "";
                        if ( $id != "-1"){
                        $msg =    \App\Http\Service\UtilService::recebe_html($url_sistema."importacao/handlerMateriaRtv.aspx?acao=completa_materia&id=".$id);
@@ -488,7 +488,7 @@ class MateriaRascunhoController extends Controller {
         public function show_materia_gerada($id)
 	{
             
-             $url_sistema = env("PATH_SISTEMA_MIDIACLIP");
+             $url_sistema = config("app.url_midiaclip");
              
              if ( $url_sistema != ""){
                      \App\Http\Service\UtilService::recebe_html($url_sistema."importacao/handlerMateriaRtv.aspx?acao=completa_materia&id=".$id);

@@ -199,7 +199,7 @@ class MateriaRascunhoService{
     
     public static function getMateriaGerada($id){
         
-        $DB_MIDIACLIP = env("DB_MIDIACLIP"); 
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP"); 
         
         $sql = "select m.id,  m.titulo,  m.data_insert_materia,  m.data_materia, ja.nome as apresentador, pr.nome as programa,  m.hora_inicio, "
                 . " m.duracao, em.nome as emissora, '' as clientes, '' as arquivos, m.status_atual as status "
@@ -237,7 +237,7 @@ class MateriaRascunhoService{
                     " and av.tabela in ( 'materia_radio_tv_jornal' , 'materia_radiotv_jornal') ";
             
             
-            $PATH_SISTEMA_MIDIACLIP = env("PATH_SISTEMA_MIDIACLIP") . "arquivos/";
+            $PATH_SISTEMA_MIDIACLIP = config("app.url_midiaclip") . "arquivos/";
             
             $EH_INTEGRADOR = \App\Http\Dao\ConfigDao::getValor("EH_INTEGRADOR");
             if ( $EH_INTEGRADOR ){

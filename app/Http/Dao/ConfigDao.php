@@ -109,10 +109,10 @@ class ConfigDao {
         public static function getSchemaMidiaClip(){
         
             
-                $DB_MIDIACLIP = env("DB_MIDIACLIP");
+                $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
                 
                 if ( $DB_MIDIACLIP == ""){
-                     $DB_MIDIACLIP = env("DB_MIDICALIP");
+                     $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
                 }
                 
                 if ( $DB_MIDIACLIP == ""){

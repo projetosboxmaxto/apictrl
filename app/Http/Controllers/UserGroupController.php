@@ -79,7 +79,7 @@ class UserGroupController extends Controller {
 
         
         function encrypt( $senha ){
-               return md5( env("CRYPT_PASS") . $senha);
+               return md5( config("app.CRYPT_PASS") . $senha);
             //  return Hash::make( $senha);
         }
 		public function testheader(Request $request){

@@ -274,8 +274,8 @@ class EventosArquivosController extends Controller {
             // $ls_tags =  self::get_lsTags();
            
 
-             $ELASTIC_ENABLE = env("ELASTIC_ENABLE");
-             $ELASTIC_URL = env("ELASTIC_URL");
+             $ELASTIC_ENABLE = config("app.ELASTIC_ENABLE");
+             $ELASTIC_URL = config("app.ELASTIC_URL");
              if ( $ELASTIC_ENABLE ){
                  $reg_arquivo = \App\EventosArquivos::find( $novo->id ) ;
                  \App\Http\Service\FilaAtividadeService::adicionar($reg_arquivo, 0, "elastic");
@@ -388,8 +388,8 @@ class EventosArquivosController extends Controller {
                 $ls_tags =  \App\Http\Service\TempSearchService::getSQLTagsTotal($id_programa);
                 $temp_search =  \App\Http\Service\TempSearchService::searchByArquivo($ls_tags, $id);
 
-                $ELASTIC_ENABLE = env("ELASTIC_ENABLE");
-                $ELASTIC_URL = env("ELASTIC_URL");
+                $ELASTIC_ENABLE = config("app.ELASTIC_ENABLE");
+                $ELASTIC_URL = config("app.ELASTIC_URL");
                  if ( $ELASTIC_ENABLE ){
                      $reg_arquivo = \App\EventosArquivos::find( $id ) ;
                      \App\Http\Service\FilaAtividadeService::adicionar($reg_arquivo, 0, "elastic");
@@ -455,8 +455,8 @@ class EventosArquivosController extends Controller {
             $lista = DB::select($sql);
         
             
-                     $ELASTIC_ENABLE = env("ELASTIC_ENABLE");
-                     $ELASTIC_URL = env("ELASTIC_URL");
+                     $ELASTIC_ENABLE = config("app.ELASTIC_ENABLE");
+                     $ELASTIC_URL = config("app.ELASTIC_URL");
 
 
 
@@ -519,8 +519,8 @@ class EventosArquivosController extends Controller {
                 //      $ls_tags =  \App\Http\Service\TempSearchService::getSQLTagsTotal();
             }
             
-            $ELASTIC_ENABLE = \App\Http\Dao\ConfigDao::getValor("ELASTIC_ENABLE"); // env("ELASTIC_ENABLE");
-            $ELASTIC_URL = env("ELASTIC_URL");
+            $ELASTIC_ENABLE = \App\Http\Dao\ConfigDao::getValor("ELASTIC_ENABLE"); // config("app.ELASTIC_ENABLE");
+            $ELASTIC_URL = config("app.ELASTIC_URL");
             
             $TRANSCRICAO_BUSCA_EXTERNA = \App\Http\Dao\ConfigDao::getValor("TRANSCRICAO_BUSCA_EXTERNA");
            
@@ -605,7 +605,7 @@ class EventosArquivosController extends Controller {
 
         
         function encrypt( $senha ){
-               return md5( env("CRYPT_PASS") . $senha);
+               return md5( config("app.CRYPT_PASS") . $senha);
             //  return Hash::make( $senha);
         }
 		public function testheader(Request $request){
@@ -802,7 +802,7 @@ class EventosArquivosController extends Controller {
            $sql = \App\Http\Service\EventoService::sqlArquivos($tipo == "cut")." where 1 = 1 and ea.id = ". $id . $compl . " order by ea.hora_inicio_seg ";
            $arquivos = DB::select( $sql );
            
-           $url_base = env("PATH_URL_VIDEOS");
+           $url_base = config("app.PATH_URL_VIDEOS");
             
             for ( $i = 0; $i < count($arquivos); $i++ ){
                 $item = &$arquivos[$i];

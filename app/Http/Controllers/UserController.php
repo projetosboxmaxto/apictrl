@@ -63,7 +63,7 @@ class UserController extends Controller {
 
         
         function encrypt( $senha ){
-               return md5( env("CRYPT_PASS") . $senha);
+               return md5( config("app.CRYPT_PASS") . $senha);
             //  return Hash::make( $senha);
         }
 	public function testheader(Request $request){
@@ -93,7 +93,7 @@ class UserController extends Controller {
                          }
                          
                          
-                         $DB_MIDICALIP  = env("DB_MIDICALIP");
+                         $DB_MIDICALIP  = config("app.DB_MIDIACLIP");
                          
                          $sql = " select * from ". $DB_MIDICALIP. ".usuario where upper(login)=upper('". $login."') and upper(senha)=upper('".md5($senha)."') ";
                          

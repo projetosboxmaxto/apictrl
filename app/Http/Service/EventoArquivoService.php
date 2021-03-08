@@ -13,7 +13,7 @@ class EventoArquivoService{
            $sql = \App\Http\Service\EventoService::sqlArquivos($tipo == "cut")." where 1 = 1 and ea.id_evento = ". $id . $compl . " order by ea.hora_inicio_seg ";
            $arquivos = DB::select( $sql );
            
-           $url_base = env("PATH_URL_VIDEOS");
+           $url_base = config("app.PATH_URL_VIDEOS");
             
             for ( $i = 0; $i < count($arquivos); $i++ ){
                 $item = &$arquivos[$i];
@@ -576,7 +576,7 @@ class EventoArquivoService{
                  
              }
              
-             $url_sistema = env("PATH_SISTEMA_MIDIACLIP");
+             $url_sistema = config("app.url_midiaclip");
              $eh_integrador  = \App\Http\Dao\ConfigDao::getValor("EH_INTEGRADOR");
              $url_integrador  = \App\Http\Dao\ConfigDao::getValor("URL_API_INTEGRADOR");
              
@@ -737,7 +737,7 @@ class EventoArquivoService{
                  //$url_download = $UrlUploadEvento."/eventos/".$evento_pai->dia."/".$evento_pai->id."/".$nome_arquivo_pai;
                  $url_download = $UrlUploadEvento . str_replace("//","/", "/". $arquivo_pai->path);
                  //die("url_download ". $url_download  );
-                 $pasta_tmp = env("PATH_ARQUIVOS").DIRECTORY_SEPARATOR."tmp";
+                 $pasta_tmp = config("app.PATH_ARQUIVOS").DIRECTORY_SEPARATOR."tmp";
                  
                  if (!file_exists($pasta_tmp)){
                      mkdir($pasta_tmp);

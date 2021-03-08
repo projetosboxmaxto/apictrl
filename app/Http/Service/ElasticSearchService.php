@@ -13,7 +13,7 @@ class ElasticSearchService{
     
     static $prefixo = "/midiaclip/transcricao";
     static function create_arquivo($reg_arquivo, $caminho = ""){
-        $elasticsearchurl = env("ELASTIC_URL");
+        $elasticsearchurl = config("app.ELASTIC_URL");
         $data  = array("id" => $reg_arquivo->id,
                         "texto" => $reg_arquivo->texto,
                         "id_evento" => $reg_arquivo->id_evento,
@@ -35,7 +35,7 @@ class ElasticSearchService{
 
     static function remove_arquivo($reg_arquivo, $caminho = ""){
           $data = array();
-        $elasticsearchurl = env("ELASTIC_URL");
+        $elasticsearchurl = config("app.ELASTIC_URL");
 
           if ( $caminho == ""){
                 //testeindex/testename
@@ -147,7 +147,7 @@ class ElasticSearchService{
     }
     static function executaQueries($lista, $caminho = ""){
         //https://stackoverflow.com/questions/21764766/determining-which-words-were-matched-in-a-fuzzy-search
-        $DB_MIDIACLIP = env("DB_MIDIACLIP");
+        $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
         
           for ( $i = 0; $i < count($lista); $i++ ){
                 $item = $lista[$i];
@@ -455,7 +455,7 @@ class ElasticSearchService{
     
     static function call_search($termos){
         
-            $elasticsearchurl = env("ELASTIC_URL");
+            $elasticsearchurl = config("app.ELASTIC_URL");
      
            $url = $elasticsearchurl.self::$prefixo."/_search";
 

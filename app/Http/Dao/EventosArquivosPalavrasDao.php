@@ -262,7 +262,7 @@ class EventosArquivosPalavrasDao {
        //Faz a busca diretamente na tabela eventos_arquivos_palavras e a partir dela popula as outras..
        public static function buscaSemLike($id_evento_arquivo){
            
-           $DB_MIDIACLIP = env("DB_MIDIACLIP");
+           $DB_MIDIACLIP = config("app.DB_MIDIACLIP");
            
            $reg_arquivo = \App\EventosArquivos::find($id_evento_arquivo);
         

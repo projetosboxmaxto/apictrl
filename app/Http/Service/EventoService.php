@@ -327,6 +327,7 @@ class EventoService{
             }
 
             if($tempo_fim_seg > 86399) $tempo_fim_seg = 86399;
+            if($tempo_inicio_seg < 0) $tempo_inicio_seg = 0;
             
             $duracao_seg = $tempo_fim_seg - $tempo_inicio_seg;
             

@@ -164,12 +164,14 @@ class EventoService{
          }
         
 		self::$sql_last0 = $sql;
+
+        
         $lista = DB::select($sql);   
 
         if ( ! $ret_mclipweb ){
             return $lista;
         }
-        
+
         if (  $write ){
                     for ( $i = 0; $i < count($lista); $i++ ){
                         $item = $lista[$i];
@@ -266,11 +268,21 @@ class EventoService{
         
         for ( $i = 0; $i < count($lista2); $i++ ){
             $item = &$lista2[$i];
-            $item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");
+            //$item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");
+            $item->arquivosEnviados = \App\Http\Dao\ConfigDao::executeScalar("SELECT nome as res FROM boxmmsdb.eventos_arquivos WHERE id_evento =  ". $item->id. " order by id desc");
+            $item->arquivoRestantes = EventoService::listarArquivosRestante($item->path, $item->arquivosEnviados);
         }
         return $lista2;
     }
     
+    private static function listarArquivosRestante($dir, $arquivosEnviados) {
+        $dh  = opendir($dir);
+        while (false !== ($arquivoPasta = readdir($dh))) {
+            foreach($arquivosEnviados as $arquivoEnviado) if($arquivoEnviado == $arquivoPasta) continue;
+            $files[] = $filename;
+        }
+        return $files;
+    }
     
     public static function salvarPrimeiro($id_programa, $dia, $tipo_hora = "normal"){
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
@@ -281,7 +293,7 @@ class EventoService{
         $reg->data = date("Y-m-d");
         $reg->tipo = "pai";
         $reg->tipo_hora = $tipo_hora;
-        
+
         $sql = "select id as res from eventos where dia = ". $dia. " and id_programa = ". $id_programa;
         $idtmp = \App\Http\Dao\ConfigDao::executeScalar($sql);
         

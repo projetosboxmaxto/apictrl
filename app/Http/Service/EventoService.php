@@ -114,7 +114,7 @@ class EventoService{
     public static function getListEvento($dia, $dia_semana, $hora_seg, $write = true, $ret_mclipweb= true ){
         
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
-        /*
+        
         $sql = "select ev.id, 
                     pr.id as id_programa, 
                     'normal' as tipo_hora  
@@ -179,7 +179,7 @@ class EventoService{
                         self::salvarPrimeiro($item->id_programa, $dia, $item->tipo_hora);
                     }
         }
-        */
+        
         $sql = "select ev.id, pr.nome as programa, em.nome as emissora,
                  pr.transcricao_prioridade as prioridade, 
                  case when pr.transcricao_prioridade  = 'Alta' then 1
@@ -193,7 +193,7 @@ class EventoService{
                  where
                  ev.dia = ". $dia.
                 " and ev.hora_inicio_seg <=".$hora_seg." and ev.hora_fim_seg >= " . $hora_seg. " and ".
-                //" ev.tempo_realizado_minutos < ev.tempo_total_minutos and ". 
+                " ev.tempo_realizado_minutos < ev.tempo_total_minutos and ". 
                 " ev.tipo = 'pai' ";
         
         
@@ -215,7 +215,7 @@ class EventoService{
                  ev.dia = ". $dia. " and " . 
                 " ev.hora_inicio_seg > ev.hora_fim_seg and " .
                 "  ev.hora_inicio_seg <= " . $hora_seg. " and ".
-                //"  ev.tempo_realizado_minutos < ev.tempo_total_minutos and " . 
+                "  ev.tempo_realizado_minutos < ev.tempo_total_minutos and " . 
                 " ev.tipo = 'pai' "; 
             
         }
@@ -235,9 +235,9 @@ class EventoService{
                  where
                  ev.dia = ". $dia.
                 " and ev.hora_inicio_seg > ev.hora_fim_seg "
-                    . " and ev.hora_fim_seg >= " . $hora_seg. 
-                    //. " and ev.tempo_realizado_minutos < ev.tempo_total_minutos ".
-                    "and ev.tipo = 'pai' "; 
+                    . " and ev.hora_fim_seg >= " . $hora_seg
+                    . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
+                    . "and ev.tipo = 'pai' "; 
             
         }
         
@@ -257,7 +257,7 @@ class EventoService{
                  ev.dia = ". $dia.
                 " and ev.hora_fim_seg < " . $hora_seg. ""
                  . " and ( ". $hora_seg. " - ev.hora_fim_seg ) <= " . $tempo_maximo_tentativa 
-                 //. " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
+                 . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
                  . " and ev.tipo = 'pai' "; 
           
           //terminou as 5h e agora é 6h
@@ -273,22 +273,12 @@ class EventoService{
         
         for ( $i = 0; $i < count($lista2); $i++ ){
             $item = &$lista2[$i];
-            //$item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");
-            $arquivosEnviados = DB::select("SELECT nome as res FROM boxmmsdb.eventos_arquivos WHERE id_evento =  ". $item->id. " order by id desc");
-            foreach($arquivosEnviados as $arquivo) $item->arquivosEnviados[] = $arquivo->res;
-            //------$item->arquivoRestantes = EventoService::listarArquivosRestante($item->path, $arquivosEnviados);
+            $item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");
+            $arquivosEnviados = DB::select("SELECT nome as res FROM boxmmsdb.eventos_arquivos WHERE id_evento =  ". $item->id. " order by id");
+            foreach($arquivosEnviados as $arquivo) { $item->arquivosEnviados[] = substr($arquivo->res, strpos($arquivo->res, "-") + 1, strlen($arquivo->res) - 1); }
         }
         return $lista2;
     }
-    
-    /*private static function listarArquivosRestante($dir, $arquivosEnviados) {
-        $dh  = opendir("c:".$dir);
-        while (false !== ($arquivoPasta = readdir($dh))) {
-            foreach($arquivosEnviados as $arquivoEnviado) if($arquivoEnviado == $arquivoPasta) continue;
-            $files[] = $filename;
-        }
-        return $files;
-    }*/
     
     public static function salvarPrimeiro($id_programa, $dia, $tipo_hora = "normal"){
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();

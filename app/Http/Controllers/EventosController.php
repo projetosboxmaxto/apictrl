@@ -26,15 +26,10 @@ class EventosController extends Controller {
 	 */
 	public function index(Request $request)
 	{
-            
-            //$hora = date("H:i:s");
-            //$dia = date("Ymd");
-            //$dia_semana = date("w");
+            $hora = date("H:i:s");
+            $dia = date("Ymd");
+            $dia_semana = date("w");
 
-            $hora = "15:00:00";
-            $dia = "20210324";
-            $dia_semana = "3";
-            
             if ( $request->input("data") != ""){
                 $odata = new DateTime( $request->input("data") );
                 
@@ -67,8 +62,6 @@ class EventosController extends Controller {
             }
             
             return $this->sendResponse($lista);   
-            
-            
 	    
 	}
         

@@ -270,8 +270,6 @@ class EventoService{
         $lista2 = DB::select($sql);
         
 		self::$sql_last = $sql;
-        
-        $item->arquivosEnviados = array();
 
         for ( $i = 0; $i < count($lista2); $i++ ){
             $item = &$lista2[$i];

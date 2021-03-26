@@ -271,6 +271,8 @@ class EventoService{
         
 		self::$sql_last = $sql;
         
+        $item->arquivosEnviados = array();
+
         for ( $i = 0; $i < count($lista2); $i++ ){
             $item = &$lista2[$i];
             $item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");

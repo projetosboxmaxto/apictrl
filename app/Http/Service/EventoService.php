@@ -276,6 +276,7 @@ class EventoService{
             $item->ultimo_arquivo = \App\Http\Dao\ConfigDao::executeScalar("select nome as res from eventos_arquivos where id_evento = ". $item->id. " order by id desc limit 0, 1 ");
             $arquivosEnviados = DB::select("SELECT nome as res FROM boxmmsdb.eventos_arquivos WHERE id_evento =  ". $item->id. " order by id");
             foreach($arquivosEnviados as $arquivo) { $item->arquivosEnviados[] = substr($arquivo->res, strpos($arquivo->res, "-") + 1, strlen($arquivo->res) - 1); }
+            $item->countArquivosEnviados = count($arquivosEnviados);
         }
         return $lista2;
     }

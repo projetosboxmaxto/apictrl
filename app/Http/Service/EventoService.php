@@ -192,9 +192,10 @@ class EventoService{
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
                  ev.dia = ". $dia.
-                " and ev.hora_inicio_seg <=".$hora_seg." and ev.hora_fim_seg >= " . $hora_seg. " and ".
-                " ev.tempo_realizado_minutos < ev.tempo_total_minutos and ". 
-                " ev.tipo = 'pai' ";
+                " and ev.hora_inicio_seg <=".$hora_seg.
+                //" and ev.hora_fim_seg >= " . $hora_seg.
+                " and ev.tempo_realizado_minutos < ev.tempo_total_minutos ". 
+                " and ev.tipo = 'pai' ";
         
         
         // 22 -> 1
@@ -213,9 +214,10 @@ class EventoService{
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
                  ev.dia = ". $dia. " and " . 
-                " ev.hora_inicio_seg > ev.hora_fim_seg and " .
+                "  ev.hora_inicio_seg > ev.hora_fim_seg and " .
                 "  ev.hora_inicio_seg <= " . $hora_seg. " and ".
-                "  ev.tempo_realizado_minutos < ev.tempo_total_minutos and " . 
+
+                " ev.tempo_realizado_minutos < ev.tempo_total_minutos and " . 
                 " ev.tipo = 'pai' "; 
             
         }
@@ -233,11 +235,12 @@ class EventoService{
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
-                 ev.dia = ". $dia.
-                " and ev.hora_inicio_seg > ev.hora_fim_seg "
-                    . " and ev.hora_fim_seg >= " . $hora_seg
+                 ev.dia = ". $dia
+                    . " and ev.hora_inicio_seg > ev.hora_fim_seg "
+                    //. " and ev.hora_fim_seg >= " . $hora_seg
+
                     . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
-                    . "and ev.tipo = 'pai' "; 
+                    . " and ev.tipo = 'pai' "; 
             
         }
         
@@ -254,9 +257,10 @@ class EventoService{
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
-                 ev.dia = ". $dia.
-                " and ev.hora_fim_seg < " . $hora_seg. ""
+                 ev.dia = ". $dia
+                 //." and ev.hora_fim_seg < " . $hora_seg. ""
                  . " and ( ". $hora_seg. " - ev.hora_fim_seg ) <= " . $tempo_maximo_tentativa 
+
                  . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
                  . " and ev.tipo = 'pai' "; 
           

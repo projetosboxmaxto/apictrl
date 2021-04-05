@@ -193,7 +193,7 @@ class EventoService{
                  where
                  ev.dia = ". $dia.
                 " and ev.hora_inicio_seg <=".$hora_seg.
-                //" and ev.hora_fim_seg >= " . $hora_seg.
+                " and ev.hora_fim_seg >= " . $hora_seg.
                 " and ev.tempo_realizado_minutos < ev.tempo_total_minutos ". 
                 " and ev.tipo = 'pai' ";
         
@@ -237,7 +237,7 @@ class EventoService{
                  where
                  ev.dia = ". $dia
                     . " and ev.hora_inicio_seg > ev.hora_fim_seg "
-                    //. " and ev.hora_fim_seg >= " . $hora_seg
+                    . " and ev.hora_fim_seg >= " . $hora_seg
 
                     . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
                     . " and ev.tipo = 'pai' "; 
@@ -258,7 +258,7 @@ class EventoService{
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
                  ev.dia = ". $dia
-                 //." and ev.hora_fim_seg < " . $hora_seg. ""
+                 . " and ev.hora_fim_seg < " . $hora_seg. ""
                  . " and ( ". $hora_seg. " - ev.hora_fim_seg ) <= " . $tempo_maximo_tentativa 
 
                  . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "

@@ -518,26 +518,38 @@ class EventosController extends Controller {
         }
         
         public function ajustabyId($id_evento, &$tempos){
-              $lista = \App\EventosArquivos::where('id_evento', '=', $id_evento)->get();
+            $lista = \App\EventosArquivos::where('id_evento', '=', $id_evento)->get();
+            $evento = \App\Eventos::where('id', '=', $id_evento)->first();
+            $hora_inicio_evento_seg = \App\Http\Service\UtilService::time_to_seconds( $evento[0]->hora_inicio );
+            $hora_fim_evento_seg = \App\Http\Service\UtilService::time_to_seconds( $evento[0]->hora_fim );
+
+            for ( $i = 0; $i < count($lista); $i++ ){
+                    $item = &$lista[$i];
+                    $hora_inicio =  \App\Http\Service\EventoArquivoService::getTimeFromFileName($item->nome);
+                    
+                    $item->hora_inicio = $hora_inicio;
+                    $item->hora_inicio_seg = \App\Http\Service\UtilService::time_to_seconds( $hora_inicio );
+
+                    $tempo_realizado = 5;
+
+                    if($item->hora_inicio_seg < $hora_inicio_evento_seg) 
+                        $tempo_realizado = $hora_inicio_evento_seg - $item->hora_inicio_seg;
+
+                    if(($item->hora_inicio_seg + 300) > $hora_fim_evento_seg) 
+                        $tempo_realizado = ($item->hora_inicio_seg + 300) - $item->hora_fim_evento_seg;
+
+                    $item->tempo_realizado_minutos = $tempo_realizado;
+                    $item->save();
+                    
+                    $tempos[count($tempos)] = array("file"=> $item->nome, "hora" => $item->hora_inicio, "seg"=>$item->hora_inicio_seg);
+                    //   
                 
-                for ( $i = 0; $i < count($lista); $i++ ){
-                       $item = &$lista[$i];
-                       $hora_inicio =  \App\Http\Service\EventoArquivoService::getTimeFromFileName($item->nome);
-                       
-                       $item->hora_inicio = $hora_inicio;
-                       $item->hora_inicio_seg = \App\Http\Service\UtilService::time_to_seconds( $hora_inicio );
-                       $item->tempo_realizado_minutos = 5;
-                       $item->save();
-                       
-                       $tempos[count($tempos)] = array("file"=> $item->nome, "hora" => $item->hora_inicio, "seg"=>$item->hora_inicio_seg);
-                       //   
-                 
-                }
-                $qtde = count($lista) ;
-                $evento = \App\Eventos::find($id_evento);
-                $tot2 = \App\Http\Dao\ConfigDao::executeScalar("select sum(tempo_realizado_minutos) as res from eventos_arquivos where id_evento = ". $evento->id );
-                $evento->tempo_realizado_minutos = $tot2;
-                $evento->save();
+            }
+            $qtde = count($lista) ;
+            $evento = \App\Eventos::find($id_evento);
+            $tot2 = \App\Http\Dao\ConfigDao::executeScalar("select sum(tempo_realizado_minutos) as res from eventos_arquivos where id_evento = ". $evento->id );
+            $evento->tempo_realizado_minutos = $tot2;
+            $evento->save();
         }
         
         public function ajustaTempo(Request $request){

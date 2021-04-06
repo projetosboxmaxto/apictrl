@@ -533,11 +533,13 @@ class EventosController extends Controller {
                     $tempo_realizado = 5;
 
                     if($item->hora_inicio_seg < $hora_inicio_evento_seg) 
-                        $tempo_realizado = $hora_inicio_evento_seg - $item->hora_inicio_seg;
+                        $tempo_realizado = (($item->hora_inicio_seg + 300) - $hora_inicio_evento_seg) / 60;
 
                     if(($item->hora_inicio_seg + 300) > $hora_fim_evento_seg) 
-                        $tempo_realizado = ($item->hora_inicio_seg + 300) - $item->hora_fim_evento_seg;
+                        $tempo_realizado = ($item->hora_fim_evento_seg - ($item->hora_inicio_seg + 300)) / 60;
 
+                    if($tempo_realizado < 0) $tempo_realizado = 0;
+                
                     $item->tempo_realizado_minutos = $tempo_realizado;
                     $item->save();
                     

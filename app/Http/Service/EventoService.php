@@ -209,7 +209,8 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, '' as ultimo_arquivo , 'virada' as tipo_hora 
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, em.volume_ganho,
+                  '' as ultimo_arquivo , 'virada' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
@@ -231,7 +232,8 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, '' as ultimo_arquivo , 'virada' as tipo_hora 
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, em.volume_ganho,
+                  '' as ultimo_arquivo , 'virada' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
@@ -253,7 +255,8 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, '' as ultimo_arquivo , 'extra' as tipo_hora 
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, em.volume_ganho,
+                  '' as ultimo_arquivo , 'extra' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora

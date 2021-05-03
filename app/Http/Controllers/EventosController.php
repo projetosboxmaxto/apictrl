@@ -524,27 +524,27 @@ class EventosController extends Controller {
             $hora_fim_evento_seg = \App\Http\Service\UtilService::time_to_seconds( $evento[0]->hora_fim );
 
             for ( $i = 0; $i < count($lista); $i++ ){
-                    $item = &$lista[$i];
-                    $hora_inicio =  \App\Http\Service\EventoArquivoService::getTimeFromFileName($item->nome);
-                    
-                    $item->hora_inicio = $hora_inicio;
-                    $item->hora_inicio_seg = \App\Http\Service\UtilService::time_to_seconds( $hora_inicio );
-
-                    $tempo_realizado = 5;
-
-                    if($item->hora_inicio_seg < $hora_inicio_evento_seg) 
-                        $tempo_realizado = (($item->hora_inicio_seg + 300) - $hora_inicio_evento_seg) / 60;
-
-                    if(($item->hora_inicio_seg + 300) > $hora_fim_evento_seg) 
-                        $tempo_realizado = ($item->hora_fim_evento_seg - ($item->hora_inicio_seg + 300)) / 60;
-
-                    if($tempo_realizado < 0) $tempo_realizado = 0;
+                $item = &$lista[$i];
+                $hora_inicio =  \App\Http\Service\EventoArquivoService::getTimeFromFileName($item->nome);
                 
-                    $item->tempo_realizado_minutos = $tempo_realizado;
-                    $item->save();
-                    
-                    $tempos[count($tempos)] = array("file"=> $item->nome, "hora" => $item->hora_inicio, "seg"=>$item->hora_inicio_seg);
-                    //   
+                $item->hora_inicio = $hora_inicio;
+                $item->hora_inicio_seg = \App\Http\Service\UtilService::time_to_seconds( $hora_inicio );
+
+                $tempo_realizado = 5;
+
+                if($item->hora_inicio_seg < $hora_inicio_evento_seg) 
+                    $tempo_realizado = (($item->hora_inicio_seg + 300) - $hora_inicio_evento_seg) / 60;
+
+                if(($item->hora_inicio_seg + 300) > $hora_fim_evento_seg) 
+                    $tempo_realizado = ($item->hora_fim_evento_seg - ($item->hora_inicio_seg + 300)) / 60;
+
+                if($tempo_realizado < 0) $tempo_realizado = 0;
+            
+                $item->tempo_realizado_minutos = $tempo_realizado;
+                $item->save();
+                
+                $tempos[count($tempos)] = array("file"=> $item->nome, "hora" => $item->hora_inicio, "seg"=>$item->hora_inicio_seg);
+                //   
                 
             }
             $qtde = count($lista) ;
@@ -613,9 +613,7 @@ class EventosController extends Controller {
                 
                 return $this->sendError("Não foi localizado evento com ID". $id_event);
             }
-            
-            
-            
+
             
             $path_evento = \App\Http\Service\EventoService::getPathEvento($evento->id);
             $subfolder = \App\Http\Service\EventoService::getPrePasta($evento);
@@ -626,7 +624,7 @@ class EventosController extends Controller {
             if ( $tempo == "" ){
                 $tempo = 5;
             }
-            
+    
             $file = \Request::file('arquivo'); 
             
             $objUpload->sendImagem($file, $subfolder."/". $evento->dia."/".$evento->id."/". $file->getClientOriginalName());
@@ -660,10 +658,21 @@ class EventosController extends Controller {
                     }
             }
            
-            $reg->tempo_realizado_minutos = $tempo;  
             $reg->hora_inicio = \App\Http\Service\UtilService::converteSegundos_ParaHoraMinuto($hora_inicio_seg);  
             $reg->hora_inicio_seg = $hora_inicio_seg;  
+
+            $hora_inicio_evento_seg = \App\Http\Service\UtilService::time_to_seconds( $evento->hora_inicio );
+            $hora_fim_evento_seg = \App\Http\Service\UtilService::time_to_seconds( $evento->hora_fim );
             
+        
+            if($reg->hora_inicio_seg < $hora_inicio_evento_seg) 
+                $tempo = (($reg->hora_inicio_seg + 300) - $hora_inicio_evento_seg) / 60;
+
+            if(($reg->hora_inicio_seg + 300) > $hora_fim_evento_seg) 
+                $tempo = ($reg->hora_fim_evento_seg - ($reg->hora_inicio_seg + 300)) / 60;
+
+            if($tempo < 0) $tempo = 0;
+            $reg->tempo_realizado_minutos = $tempo;
             
             $reg->texto = $request->input('texto');  
             $reg->json = $request->input('json');  

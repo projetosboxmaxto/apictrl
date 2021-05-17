@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use DateTime;
 
 
-class ClientesController extends Controller {
+class PracasController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -29,8 +29,8 @@ class ClientesController extends Controller {
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
         
         $sql = " SELECT 
-                    id, nome, servidor, id_veiculo, id_praca, uf, transcricao_url, ativo
-                FROM boxintegra.emissora";
+                    id, descricao, tipo_cadastro_basico, servidor, ano, sequencial, tabela_importado, ativo 
+                FROM boxintegra.cadastro_basico";
 
 
         $lista2 = DB::select($sql);

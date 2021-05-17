@@ -26,6 +26,12 @@ Route::group([
                 Route::post('/arquivo', 'EventosController@salvarArquivo');
                 Route::get('/clear', 'EventosController@clear');
 
+
+                Route::get('/clientes/lista', 'ClientesController@clear');
+                Route::get('/pracas/lista', 'PracasController@clear');
+                Route::get('/emissoras/lista', 'EmissorasController@clear');
+
+
                 Route::get('/eventos/{id}', 'EventosController@show');
                 Route::get('/eventos2/{id}', 'EventosController@show2');
                 Route::get('/eventos', 'EventosController@index2');

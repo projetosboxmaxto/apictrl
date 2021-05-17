@@ -29,8 +29,8 @@ class ClientesController extends Controller {
         $DB_MIDIACLIP = \App\Http\Dao\ConfigDao::getSchemaMidiaClip();
         
         $sql = " SELECT 
-                    id, nome, servidor, id_veiculo, id_praca, uf, transcricao_url, ativo
-                FROM boxintegra.emissora";
+                    id,nome,id_registro_importado,status,id_tipo,bl_todos_programas, ativo 
+                FROM boxintegra.cliente";
 
 
         $lista2 = DB::select($sql);

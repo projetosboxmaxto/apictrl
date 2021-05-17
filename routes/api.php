@@ -27,9 +27,9 @@ Route::group([
                 Route::get('/clear', 'EventosController@clear');
 
 
-                Route::get('/clientes/lista', 'ClientesController@clear');
-                Route::get('/pracas/lista', 'PracasController@clear');
-                Route::get('/emissoras/lista', 'EmissorasController@clear');
+                Route::get('/clientes/lista', 'ClientesController@get');
+                Route::get('/pracas/lista', 'PracasController@get');
+                Route::get('/emissoras/lista', 'EmissorasController@get');
 
 
                 Route::get('/eventos/{id}', 'EventosController@show');

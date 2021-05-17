@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use DateTime;
 
 
-class ClientesController extends Controller {
+class EmissorasController extends Controller {
 
 	/**
 	 * Display a listing of the resource.

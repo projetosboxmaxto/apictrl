@@ -25,8 +25,6 @@ Route::group([
                 Route::get('/events', 'EventosController@index');
                 Route::post('/arquivo', 'EventosController@salvarArquivo');
                 Route::get('/clear', 'EventosController@clear');
-          
-
 
                 Route::get('/eventos/{id}', 'EventosController@show');
                 Route::get('/eventos2/{id}', 'EventosController@show2');
@@ -34,9 +32,7 @@ Route::group([
                 Route::get('/eventos_filhos', 'EventosController@getEventoFilho');
                 Route::get('/eventos_filhos2', 'EventosController@getEventoFilho2');
                 Route::post('/eventos_status', 'EventosController@indicastatus');
-                
-                
-                
+
                 Route::get('/clientes', 'TranscricaoController@getClientes');
                 Route::get('/programas', 'TranscricaoController@getProgramsFiltro');
                 Route::get('/emissoras', 'TranscricaoController@getListEmissoras');

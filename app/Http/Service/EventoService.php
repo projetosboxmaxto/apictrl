@@ -184,7 +184,7 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 2
                  else 3 end as prioridade_int,
                 ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(100,em.volume_ganho) as volume_ganho,
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(em.volume_ganho, 100) as volume_ganho,
                   '' as ultimo_arquivo, 'normal' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
@@ -207,7 +207,7 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(100,em.volume_ganho) as volume_ganho,
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(em.volume_ganho, 100) as volume_ganho,
                   '' as ultimo_arquivo , 'virada' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
@@ -230,7 +230,7 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(100,em.volume_ganho) as volume_ganho,
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(em.volume_ganho, 100) as volume_ganho,
                   '' as ultimo_arquivo , 'virada' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa
@@ -253,7 +253,7 @@ class EventoService{
                  when pr.transcricao_prioridade  = 'Normal' then 5
                  else 6 end as prioridade_int,
                   ev.dia, ev.hora_inicio, ev.hora_fim, ev.tempo_realizado_minutos as tempo_realizado, ev.tempo_total_minutos as tempo_total,
-                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(100,em.volume_ganho) as volume_ganho,
+                  em.transcricao_url as path, em.transcricao_url2 as alt_path, COALESCE(em.volume_ganho, 100) as volume_ganho,
                   '' as ultimo_arquivo , 'extra' as tipo_hora 
                      from  eventos ev 
                      left join ". $DB_MIDIACLIP .".programa pr on pr.id = ev.id_programa

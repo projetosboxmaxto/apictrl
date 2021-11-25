@@ -143,7 +143,7 @@ class EventoService{
                  pr.transcricao_tempo_fim_seg >= ".$hora_seg. 
                 " and ev.id is null and pr.transcricao_dias like '%".$dia_semana."%'  "; 
          }
-        //die($sql );
+        die($sql );
         
 		self::$sql_last0 = $sql;
         $lista = DB::select($sql);   

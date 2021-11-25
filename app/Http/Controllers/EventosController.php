@@ -29,17 +29,17 @@ class EventosController extends Controller {
             $hora = date("H:i:s");
             $dia = date("Ymd");
             $dia_semana = date("w");
-
+            
             if ( $request->input("data") != ""){
                 $odata = new DateTime( $request->input("data") );
                 
                 $dia = $odata->format("Ymd");
                 $dia_semana =  $odata->format("w");
             }
-             if ( $request->input("hora") != ""){
+            if ( $request->input("hora") != ""){
                 $hora = $request->input("hora");
             }
-            
+ 
             //die("hora: ". $hora );
             $hora_seg = \App\Http\Service\UtilService::time_to_seconds($hora);
               

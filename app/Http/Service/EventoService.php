@@ -162,8 +162,7 @@ class EventoService{
          }
         
 		self::$sql_last0 = $sql;
-        
-        
+  
         $lista = DB::select($sql);   
 
         if ( ! $ret_mclipweb ){
@@ -177,6 +176,8 @@ class EventoService{
                         self::salvarPrimeiro($item->id_programa, $dia, $item->tipo_hora);
                     }
         }
+
+        $tempo_maximo_tentativa = 2 * 3600; //2 horas..
         
         $sql = "select ev.id, pr.nome as programa, em.nome as emissora,
                  pr.transcricao_prioridade as prioridade, 
@@ -192,11 +193,9 @@ class EventoService{
                  where
                  ev.dia = ". $dia.
                 " and ev.hora_inicio_seg <=".$hora_seg.
-                " and ev.hora_fim_seg >= " . $hora_seg.
+                " and ev.hora_fim_seg  + (".$tempo_maximo_tentativa.") >= " . $hora_seg.
                 " and ev.tempo_realizado_minutos < ev.tempo_total_minutos ". 
                 " and ev.tipo = 'pai' ";
-        
-        
         // 22 -> 1
         
         if ( false && $hora >= 20 && $hora <= 24  ){
@@ -214,13 +213,13 @@ class EventoService{
                     inner join ". $DB_MIDIACLIP .".emissora em on em.id = ev.id_emissora
                  where
                  ev.dia = ". $dia. " and " . 
-                "  ev.hora_inicio_seg > ev.hora_fim_seg and " .
+                "  ev.hora_inicio_seg > ev.hora_fim_seg  + (".$tempo_maximo_tentativa.") and " .
                 "  ev.hora_inicio_seg <= " . $hora_seg. " and ".
 
                 " ev.tempo_realizado_minutos < ev.tempo_total_minutos and " . 
                 " ev.tipo = 'pai' "; 
-            
         }
+        
         
          if (  false && $hora <= 4 ){
             
@@ -238,16 +237,14 @@ class EventoService{
                  where
                  ev.dia = ". $dia
                     . " and ev.hora_inicio_seg > ev.hora_fim_seg "
-                    . " and ev.hora_fim_seg >= " . $hora_seg
+                    . " and ev.hora_fim_seg  + (".$tempo_maximo_tentativa.") >= " . $hora_seg
 
                     . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
                     . " and ev.tipo = 'pai' "; 
-            
         }
         
-        $tempo_maximo_tentativa = 15 * 60; //1200 segundos..
         
-         $sql .= " UNION select ev.id, pr.nome as programa, em.nome as emissora,
+         /*$sql .= " UNION select ev.id, pr.nome as programa, em.nome as emissora,
                  pr.transcricao_prioridade as prioridade, 
                  case when pr.transcricao_prioridade  = 'Alta' then 4
                  when pr.transcricao_prioridade  = 'Normal' then 5
@@ -264,10 +261,10 @@ class EventoService{
                  . " and ( ". $hora_seg. " - ev.hora_fim_seg ) <= " . $tempo_maximo_tentativa 
                  . " and ev.tempo_realizado_minutos < ev.tempo_total_minutos "
                  . " and ev.tipo = 'pai' "; 
-          
+      
           //terminou as 5h e agora é 6h
         $sql .= " order by prioridade_int asc ";
-        
+        */
         /* 
                  " and ev.hora_inicio_seg <=".$hora_seg." and ev.hora_fim_seg >= " . $hora_seg. */
         
